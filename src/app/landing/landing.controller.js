@@ -9,16 +9,22 @@
       var vm = this;
       vm.userName = 'obay-mardini';
       vm.savedVideos = false;
+      vm.error = false;
       vm.repos = [];
+      vm.started = false;
+
       vm.getRepos = function(userName) {
+        vm.started = true;
         $http({
           method: 'GET',
           url: 'http://localhost:8080/getRepos/' + userName
         }).then(function successCallback(response) {
             vm.repos = JSON.parse(response.data);
             vm.savedVideos = false;
+            vm.error = false;
           }, function errorCallback(response) {
-            console.log(response)
+            vm.error = 'The user name is not correct!'
+            vm.repos = [];
           });
       }
       vm.forkRepo = function(repo) {
@@ -38,15 +44,15 @@
       }
 
       vm.getSavedRepos = function() {
+        vm.started = true;
         $http({
           method: 'GET',
           url: 'http://localhost:8080/savedRepos/' + vm.userName
         }).then(function successCallback(response) {
-            console.log(response.data);
             vm.savedVideos = true;
             vm.repos = response.data;
           }, function errorCallback(response) {
-            console.log(response)
+            vm.error = "Can you try again in a moment!"
           });
       }
 
