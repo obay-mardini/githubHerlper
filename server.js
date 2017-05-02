@@ -30,7 +30,6 @@ app.get('/savedRepos/:username', function(req, res) {
 })
 
 app.post('/saveRepo/:username', function(req, res) {
-  console.log('saveRepo', req.params.username, req.body.name)
   var repo = req.body;
   var newRepo = new Repos({
     name: repo.name,
@@ -59,14 +58,12 @@ app.get('/getRepos/:userName', function(req, res) {
        'User-agent': 'obay-mardini'
    }
   };
-  console.log(req.params.userName)
   if(req.params.userName === 'obay-mardini') {
     res.redirect('/owner');
   } else {
-    console.log('here')
     request(options, function(err, response, body) {
       if(err) console.log(err);
-      console.log(JSON.parse(body).type)
+      if(response.statusCode == 404) res.status(404).end('Not Found');
       if(JSON.parse(body).type === 'Organization') {
         res.redirect(301, '/orgs/' + req.params.userName)
       } else if(JSON.parse(body).type === 'User') {
@@ -118,7 +115,7 @@ app.get('/users/:userName', function(req, res) {
    }
   };
   request(options, function(err, response, body) {
-    if(err) console.log('ERROR ', err);
+    if(err) res.status(404).end(err);
     if(body) res.status(200).json(body);
   })
 })
