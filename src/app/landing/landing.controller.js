@@ -7,6 +7,8 @@
 
     function landingController($http) {
       var vm = this;
+      vm.userName = 'obay-mardini';
+      vm.savedVideos = false;
       vm.repos = [];
       vm.getRepos = function(userName) {
         $http({
@@ -14,26 +16,48 @@
           url: 'http://localhost:8080/getRepos/' + userName
         }).then(function successCallback(response) {
             vm.repos = JSON.parse(response.data);
-            console.log(vm.repos.length)
+            vm.savedVideos = false;
           }, function errorCallback(response) {
             console.log(response)
           });
       }
       vm.forkRepo = function(repo) {
-        vm.repos.find((element)=> {return element === repo}).forkedUrl = {
-          "git_url": "git://github.com/obay-mardini/obay2016.github.io.git",
-          "ssh_url": "git@github.com:obay-mardini/obay2016.github.io.git"
-        };
         vm.repos = vm.repos;
-        console.log(repo.forkedUrl)
-        // $http({
-        //   method: 'GET',
-        //   url: 'http://localhost:8080/forkRepo/' + repo.name + '/' + repo.owner.login
-        // }).then(function successCallback(response) {
-        //     console.log(response.data)
-        //   }, function errorCallback(response) {
-        //     console.log(response)
-        //   });
+        console.log(repo)
+        $http({
+          method: 'GET',
+          url: 'http://localhost:8080/forkRepo/' + repo.name + '/' + repo.owner.login
+        }).then(function successCallback(response) {
+            vm.repos.find((element)=> {return element === repo}).forkedUrl = {
+              git_url: JSON.parse(response.data).html_url,
+              ssh_url: JSON.parse(response.data).ssh_url
+            };
+          }, function errorCallback(response) {
+            console.log(response)
+          });
+      }
+
+      vm.getSavedRepos = function() {
+        $http({
+          method: 'GET',
+          url: 'http://localhost:8080/savedRepos/' + vm.userName
+        }).then(function successCallback(response) {
+            console.log(response.data);
+            vm.savedVideos = true;
+            vm.repos = response.data;
+          }, function errorCallback(response) {
+            console.log(response)
+          });
+      }
+
+      vm.saveRepo = function(repo) {
+        $http.post('http://localhost:8080/saveRepo/' + vm.userName, repo)
+          .success(function(data, status) {
+            console.log(data);
+          })  
+          .error(function(data, status) {
+            console.log(data)
+          });
       }
     }
 })();
