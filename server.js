@@ -2,8 +2,12 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
+var mongoose = require('mongoose');
 
-var passwords = require('/src/passwords');
+var passwords = require('./src/passwords.js');
+
+// connect to mongoDB
+mongoose.connect('mongodb://localhost/myappdatabase');
 
 app.use(bodyParser.json());
 console.log(__dirname + '\\' + 'src')
