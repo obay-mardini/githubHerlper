@@ -3,16 +3,51 @@ var app = express();
 var bodyParser = require('body-parser');
 var request = require('request');
 var mongoose = require('mongoose');
-
+var Schema = mongoose.Schema;
+var Promise = require('bluebird');
 var passwords = require('./src/passwords.js');
 
 // connect to mongoDB
 mongoose.connect('mongodb://localhost/myappdatabase');
 
+// create repos schema
+var repoSchema = new Schema({
+  name: String,
+  username: String,
+  url: {type: String, unique: true}
+});
+
+var Repos = mongoose.model('Repos', repoSchema);
+
+
+
 app.use(bodyParser.json());
 console.log(__dirname + '\\' + 'src')
 app.use(express.static(__dirname + '\\' + 'src'));
 
+app.get('/savedRepos/:username', function(req, res) {
+  Repos.find({username: req.params.username}).exec(function(err, repos) {
+    if(err) res.send(404, 'Error: ' + err);
+    res.JSON(users)
+  });
+})
+
+app.post('/saveRepo/:repo', function(req, res) {
+  var newRepo = new Repos({
+    name: req.repo.name,
+    username: req.repo.username,
+    url: req.repo.url
+  });
+
+  newRepo.save(function(err) {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log('repo saved successfully')
+    }
+
+  });
+});
 app.get('/getRepos/:userName', function(req, res) {
   var options = {
    uri: 'https://api.github.com/users/' + req.params.userName + '/repos?access_token=' + passwords.API_KEY,
