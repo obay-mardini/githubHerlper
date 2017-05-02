@@ -1,17 +1,23 @@
 <div class="search-bar form-inline">
   <input ng-model="userName" class="form-control" type="text" />
-  <button class="btn" ng-click="serachUser(userName)">
+  <button class="btn" ng-click="vm.getRepos(userName)">
     <span class="glyphicon glyphicon-search">Search</span>
+  </button>
+  <button class="btn" ng-click="vm.getSavedRepos(userName)">
+    <span class="glyphicon glyphicon-search">Save Repos</span>
   </button>
 </div>
 
-<div class="list-group">
+<div class="list-group" ng-repeat="repo in vm.repos track by $index">
   <a href="#" class="list-group-item active">
-    <h4 class="list-group-item-heading">List group item heading</h4>
-    <p class="list-group-item-text">...</p>
+    <h4 class="list-group-item-heading">{{repo.name}}</h4>
+    <p class="list-group-item-text"></p>
   </a>
-  <a href="#" class="list-group-item">
-    <h4 class="list-group-item-heading">List group item heading</h4>
-    <p class="list-group-item-text">...</p>
-  </a>
+  <button class="btn" ng-click="vm.forkRepo(repo)">
+    <span class="glyphicon glyphicon-search">Fork </span>
+  </button>
+  <button class="btn" ng-click="vm.saveRepo(repo)">
+    <span class="glyphicon glyphicon-search">Save </span>
+  </button>
+    <span class="glyphicon glyphicon-search" ng-show="repo.forkedUrl">{{repo.forkedUrl}}</span>
 </div>
