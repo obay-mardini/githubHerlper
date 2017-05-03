@@ -7,7 +7,7 @@
         <p class="list-group-item-text">{{repo.notes}}</p>
       </a>
       <button class="btn btn-danger" ng-click="vm.deleteRepo(repo)" ng-show="vm.savedVideos">DELETE</button>
-      <button class="btn btn-danger" ng-click="vm.addNote(repo)" ng-show="vm.savedVideos">Add note</button>
+      <button class="btn btn-success" ng-click="vm.addNote(repo)" ng-show="vm.savedVideos">Add note</button>
 
       <button class="btn" ng-click="vm.forkRepo(repo)" ng-hide="vm.savedVideos">
         <span class="glyphicon glyphicon-cutlery">Fork </span>
