@@ -65,5 +65,29 @@
             console.log(data)
           });
       }
+      
+      vm.deleteRepo = function(repo) {
+        var deletedRepo = vm.repos.indexOf(repo);
+        vm.repos.splice(deletedRepo, 1);
+        $http.delete('http://localhost:8080/deleteRepo/' + repo._id)
+          .success(function(data, status) {
+            console.log(data);
+          })
+          .error(function(data, status) {
+            console.log(data)
+          });
+      }
+      vm.addNote = function(repo) {
+        var x =prompt('Add your notes here!');
+
+        $http({
+          method: 'GET',
+          url: 'http://localhost:8080/addNote/' + repo.name + '/' + x
+        }).then(function successCallback(response) {
+            vm.repos.find((element)=> {return element === repo}).notes = x;
+          }, function errorCallback(response) {
+            console.log(response)
+          });
+      }
     }
 })();

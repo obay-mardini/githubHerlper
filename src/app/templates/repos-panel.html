@@ -1,11 +1,14 @@
-<div class="panel panel-default container" >
+<div class="panel panel-default container" ng-show="vm.started">
   <div class="panel-heading">Results</div>
   <div class="panel-body">
     <div class="list-group" ng-repeat="repo in vm.repos track by $index">
       <a ng-href="{{repo.html_url}}" class="list-group-item active">
         <h4 class="list-group-item-heading">{{repo.name}}</h4>
-        <p class="list-group-item-text"></p>
+        <p class="list-group-item-text">{{repo.notes}}</p>
       </a>
+      <button class="btn btn-danger" ng-click="vm.deleteRepo(repo)" ng-show="vm.savedVideos">DELETE</button>
+      <button class="btn btn-danger" ng-click="vm.addNote(repo)" ng-show="vm.savedVideos">Add note</button>
+
       <button class="btn" ng-click="vm.forkRepo(repo)" ng-hide="vm.savedVideos">
         <span class="glyphicon glyphicon-cutlery">Fork </span>
       </button>

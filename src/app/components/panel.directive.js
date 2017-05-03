@@ -9,7 +9,9 @@
 					repos: '<',
 					savedVideos: '<',
 					saveRepo: '<',
-					forkRepo: '<'
+					forkRepo: '<',
+					deleteRepo: '<',
+					addNote: '<'
 				},
 				controller: function() {
 					console.log(this)

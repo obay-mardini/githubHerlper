@@ -14,7 +14,8 @@ mongoose.connect('mongodb://localhost/myappdatabase');
 var repoSchema = new Schema({
   name: String,
   username: String,
-  url: {type: String, unique: true}
+  url: {type: String, unique: true},
+  notes: String
 });
 
 var Repos = mongoose.model('Repos', repoSchema);
@@ -29,6 +30,13 @@ app.get('/savedRepos/:username', function(req, res) {
   });
 })
 
+
+app.delete('/deleteRepo/:id', function(req, res){
+  Repos.find({_id: req.params.id}).remove().exec(function(err, data) {
+    if(err) res.status(404).end(err)
+    if(data) res.end('deleted')
+  });
+});
 app.post('/saveRepo/:username', function(req, res) {
   var repo = req.body;
   var newRepo = new Repos({
@@ -48,6 +56,7 @@ app.post('/saveRepo/:username', function(req, res) {
 
   });
 });
+
 app.get('/getRepos/:userName', function(req, res) {
   var options = {
    uri: 'https://api.github.com/users/' + req.params.userName + '?access_token=' + passwords.API_KEY,
@@ -136,5 +145,12 @@ app.get('/forkRepo/:repoName/:userName', function(req, res) {
   })
 })
 
+app.get('/addNote/:reponame/:notes', function(req, res) {
+  Repos.find({name: req.params.reponame}).update({notes: req.params.notes}).exec(function(err, repos) {
+    if(err) res.status(404).send('err', err)
+    if(repos) res.json(repos)
+  });
+})
 
 module.exports = app;
+
