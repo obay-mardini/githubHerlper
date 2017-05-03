@@ -1,0 +1,22 @@
+<div class="panel panel-default container" >
+  <div class="panel-heading">Results</div>
+  <div class="panel-body">
+    <div class="list-group" ng-repeat="repo in vm.repos track by $index">
+      <a ng-href="{{repo.html_url}}" class="list-group-item active">
+        <h4 class="list-group-item-heading">{{repo.name}}</h4>
+        <p class="list-group-item-text"></p>
+      </a>
+      <button class="btn" ng-click="vm.forkRepo(repo)" ng-hide="vm.savedVideos">
+        <span class="glyphicon glyphicon-cutlery">Fork </span>
+      </button>
+      <button class="btn" ng-click="vm.saveRepo(repo)" ng-hide="vm.savedVideos">
+        <span class="glyphicon glyphicon-floppy-save">Save </span>
+      </button>
+      <div>
+        <span ng-show="repo.forkedUrl">HTTPS: <span class="badge"> git clone {{repo.forkedUrl.git_url}}</span></span>
+        </br>
+        <span ng-show="repo.forkedUrl">SSH: <span class="badge">git clone {{repo.forkedUrl.ssh_url}}</span></span>
+      </div>
+    </div>
+  </div>
+</div>

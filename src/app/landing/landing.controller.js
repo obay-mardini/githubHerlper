@@ -60,7 +60,7 @@
         $http.post('http://localhost:8080/saveRepo/' + vm.userName, repo)
           .success(function(data, status) {
             console.log(data);
-          })  
+          })
           .error(function(data, status) {
             console.log(data)
           });
